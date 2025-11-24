@@ -4,7 +4,6 @@ import {
   Ship, 
   CalendarDays, 
   Container, 
-  ChevronDown, 
   LayoutDashboard,
   Layers,
   CircleDot,
@@ -20,7 +19,9 @@ import {
   ArrowUpFromLine,
   ArrowDownToLine,
   Cuboid,
-  FileClock
+  FileClock,
+  LogOut,
+  ChevronRight
 } from 'lucide-react';
 import { MenuGroup, ViewState } from '../types';
 
@@ -30,17 +31,8 @@ interface SidebarProps {
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({ currentView, onNavigate }) => {
-  const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>({
-    'SYSTEM': true, 
-    'PLAN': true,
-  });
-
-  const toggleGroup = (groupId: string) => {
-    setExpandedGroups(prev => ({
-      ...prev,
-      [groupId]: !prev[groupId]
-    }));
-  };
+  const [activeGroupId, setActiveGroupId] = useState<string | null>(null);
+  const [isHoveringDrawer, setIsHoveringDrawer] = useState(false);
 
   const menuStructure: MenuGroup[] = [
     {
@@ -80,144 +72,185 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentView, onNavigate }) => 
       label: 'Pre Planning',
       icon: Container,
       items: [
-        { id: 'PRE_GROUP', label: 'Group container xuất', icon: Cuboid },
+        { id: 'PRE_GROUP', label: 'Group container', icon: Cuboid },
         { id: 'PRE_LIST', label: 'Danh sách Pre-Plan', icon: FileClock },
       ]
     }
   ];
 
+  // Helper to check if a group is active based on current view
+  const isGroupActive = (group: MenuGroup) => {
+    return group.items.some(item => item.id === currentView);
+  };
+
+  const handleGroupEnter = (groupId: string) => {
+    setActiveGroupId(groupId);
+  };
+
+  const handleSidebarLeave = () => {
+    if (!isHoveringDrawer) {
+      setActiveGroupId(null);
+    }
+  };
+
   return (
-    <div className="w-[280px] h-screen bg-white text-slate-600 flex flex-col shadow-xl flex-shrink-0 relative font-sans border-r border-slate-200 overflow-hidden z-50">
+    <div className="flex h-full z-50" onMouseLeave={handleSidebarLeave}>
       
-      {/* 0. Light Theme Background Effects */}
-      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
-         <div className="absolute inset-0 bg-gradient-to-b from-white via-slate-50 to-slate-100"></div>
-         {/* Bubbles */}
-         <div className="absolute -bottom-20 -left-20 w-64 h-64 bg-brand-50 rounded-full blur-3xl opacity-60"></div>
-         <div className="absolute top-20 -right-20 w-64 h-64 bg-blue-50 rounded-full blur-3xl opacity-60"></div>
-      </div>
-
-      {/* 1. Brand Header */}
-      <div className="h-20 flex items-center px-6 border-b border-slate-100 bg-white/80 backdrop-blur-sm relative z-20">
-        <div className="flex items-center gap-3 group cursor-pointer w-full">
-          <div className="relative">
-            <div className="w-10 h-10 bg-gradient-to-tr from-brand-600 to-brand-700 rounded-xl flex items-center justify-center shadow-lg shadow-brand-200 group-hover:shadow-brand-300 transition-all duration-300 relative z-10">
-              <Layers className="text-white w-6 h-6 group-hover:animate-float" />
-            </div>
-          </div>
-          <div>
-            <h1 className="font-extrabold text-slate-800 text-xl tracking-tight leading-none">VTOS <span className="text-brand-600">PRO</span></h1>
-            <p className="text-[10px] text-slate-400 font-bold tracking-widest mt-0.5 uppercase">Terminal OS</p>
-          </div>
-        </div>
-      </div>
-
-      {/* 2. Scrollable Navigation */}
-      <nav className="flex-1 overflow-y-auto custom-scrollbar py-6 px-4 space-y-6 relative z-10">
+      {/* 1. NAVIGATION RAIL (Fixed Left) */}
+      <div className="w-20 h-full bg-white border-r border-slate-200 flex flex-col items-center py-6 shadow-xl z-50 relative">
         
-        {/* Dashboard Section */}
-        <div className="space-y-2">
-          <p className="px-3 text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Main</p>
-          <button
-            onClick={() => onNavigate('DASHBOARD')}
-            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 group relative overflow-hidden ${
-              currentView === 'DASHBOARD' 
-                ? 'bg-brand-600 text-white shadow-lg shadow-brand-200' 
-                : 'text-slate-500 hover:text-brand-600 hover:bg-brand-50'
-            }`}
-          >
-            <LayoutDashboard 
-              size={20} 
-              className={`
-                transition-all duration-300 ease-in-out
-                ${currentView === 'DASHBOARD' ? 'text-white scale-110' : 'text-slate-400 group-hover:text-brand-600 group-hover:scale-110 group-hover:rotate-3'}
-              `} 
-            />
-            <span className="font-bold text-sm">Tổng quan</span>
-          </button>
+        {/* Brand Logo */}
+        <div className="mb-8 w-12 h-12 bg-gradient-to-tr from-brand-600 to-brand-700 rounded-xl flex items-center justify-center shadow-lg shadow-brand-200 cursor-pointer hover:scale-105 transition-transform group relative">
+          <Layers className="text-white w-7 h-7" />
+          <div className="absolute left-14 bg-slate-900 text-white text-xs font-bold px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+             VTOS PRO
+          </div>
         </div>
 
-        {/* Modules */}
-        {menuStructure.map((group) => {
-          const isExpanded = expandedGroups[group.id];
-          const Icon = group.icon;
-          const isActiveParent = group.items.some(i => i.id === currentView);
-
-          return (
-            <div key={group.id} className="space-y-1">
-               <div 
-                 onClick={() => toggleGroup(group.id)}
-                 className={`flex items-center justify-between px-3 py-2 cursor-pointer group select-none transition-colors rounded-lg ${isActiveParent ? 'text-brand-700 bg-brand-50' : 'text-slate-500 hover:text-brand-600 hover:bg-slate-50'}`}
-               >
-                  <div className="flex items-center gap-3">
-                     <Icon 
-                       size={18} 
-                       className={`
-                         transition-all duration-300 ease-in-out
-                         ${isActiveParent ? 'text-brand-600' : 'text-slate-400 group-hover:text-brand-500'}
-                         ${isExpanded ? 'scale-105' : ''}
-                         group-hover:scale-110 group-hover:-rotate-6
-                       `} 
-                     />
-                     <span className="text-xs font-bold uppercase tracking-wider">{group.label}</span>
-                  </div>
-                  <ChevronDown size={14} className={`transition-transform duration-300 ${isExpanded ? 'rotate-0 text-slate-400' : '-rotate-90 text-slate-300'}`} />
-               </div>
-
-               {/* Animated Submenu */}
-               <div className={`grid transition-[grid-template-rows] duration-300 ease-in-out ${isExpanded ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
-                  <div className="overflow-hidden">
-                    <div className="space-y-1 pt-1 pb-2">
-                      {group.items.map(item => {
-                        const isActive = currentView === item.id;
-                        const ItemIcon = item.icon || CircleDot;
-                        
-                        return (
-                          <button
-                            key={item.id}
-                            onClick={() => onNavigate(item.id)}
-                            className={`
-                              w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all duration-200 relative ml-2 border-l-2 group
-                              ${isActive 
-                                ? 'border-brand-500 bg-brand-50 text-brand-700 font-bold' 
-                                : 'border-slate-200 text-slate-500 hover:text-brand-600 hover:border-brand-300 hover:bg-slate-50'
-                              }
-                            `}
-                          >
-                             <span className={`
-                               inline-block transition-all duration-300 ease-out transform origin-center
-                               ${isActive ? 'text-brand-600 scale-110 rotate-0' : 'text-slate-400 group-hover:text-brand-500 group-hover:scale-110 group-hover:rotate-6'}
-                             `}>
-                               <ItemIcon size={16} />
-                             </span>
-                             <span className={`truncate transition-all duration-300 ${isActive ? '' : 'group-hover:translate-x-1'}`}>{item.label}</span>
-                          </button>
-                        )
-                      })}
-                    </div>
-                  </div>
-               </div>
+        {/* Navigation Icons */}
+        <nav className="flex-1 flex flex-col w-full gap-4 px-2">
+          
+          {/* Dashboard Icon */}
+          <div className="relative group w-full flex justify-center">
+            <button
+              onClick={() => onNavigate('DASHBOARD')}
+              className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 ${
+                currentView === 'DASHBOARD'
+                  ? 'bg-brand-50 text-brand-600 shadow-sm ring-2 ring-brand-100'
+                  : 'text-slate-400 hover:bg-slate-50 hover:text-brand-600'
+              }`}
+            >
+              <LayoutDashboard size={24} strokeWidth={currentView === 'DASHBOARD' ? 2.5 : 2} />
+            </button>
+            {/* Tooltip */}
+            <div className="absolute left-14 top-1/2 -translate-y-1/2 bg-slate-800 text-white text-xs font-bold px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50">
+               Tổng quan
             </div>
-          );
-        })}
-      </nav>
+          </div>
 
-      {/* 3. Footer Profile */}
-      <div className="p-4 border-t border-slate-100 bg-white relative z-20">
-        <div className="bg-slate-50 rounded-xl p-3 border border-slate-200 flex items-center gap-3 hover:border-brand-200 hover:bg-brand-50/50 transition-all cursor-pointer group">
-           <div className="relative">
-              <div className="w-10 h-10 rounded-lg bg-white p-[2px] shadow-sm border border-slate-100 group-hover:scale-105 transition-transform duration-300">
-                <img src="https://ui-avatars.com/api/?name=Admin&background=0284c7&color=fff" className="w-full h-full rounded-md object-cover" alt="Profile" />
+          <div className="w-8 h-px bg-slate-100 mx-auto my-1"></div>
+
+          {/* Group Icons */}
+          {menuStructure.map((group) => {
+            const active = isGroupActive(group);
+            const isOpen = activeGroupId === group.id;
+
+            return (
+              <div 
+                key={group.id} 
+                className="relative group w-full flex justify-center"
+                onMouseEnter={() => handleGroupEnter(group.id)}
+              >
+                <button
+                  className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 relative ${
+                    active || isOpen
+                      ? 'bg-brand-600 text-white shadow-lg shadow-brand-500/30 scale-105'
+                      : 'text-slate-400 hover:bg-slate-50 hover:text-brand-600'
+                  }`}
+                >
+                  <group.icon size={24} strokeWidth={active ? 2.5 : 2} className={isOpen ? 'animate-pulse' : ''} />
+                  
+                  {active && (
+                    <span className="absolute -right-1 top-0 w-3 h-3 bg-emerald-500 border-2 border-white rounded-full"></span>
+                  )}
+                </button>
               </div>
-              <span className="absolute -bottom-1 -right-1 w-3 h-3 bg-emerald-500 border-2 border-white rounded-full shadow-sm"></span>
-           </div>
-           <div className="flex-1 overflow-hidden">
-              <h4 className="text-sm font-bold text-slate-800 truncate group-hover:text-brand-700 transition-colors">Sang Nguyen</h4>
-              <p className="text-[10px] font-bold text-slate-400 truncate uppercase tracking-wider">Senior Planner</p>
-           </div>
-           <Settings size={16} className="text-slate-400 group-hover:text-brand-600 group-hover:rotate-90 transition-all duration-500" />
+            );
+          })}
+        </nav>
+
+        {/* Footer Profile */}
+        <div className="mt-auto flex flex-col items-center gap-4">
+          <button className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 hover:bg-red-50 hover:text-red-600 transition-colors">
+             <LogOut size={18} />
+          </button>
+          <div className="w-10 h-10 rounded-lg overflow-hidden border-2 border-white shadow-md cursor-pointer hover:ring-2 hover:ring-brand-500 transition-all">
+             <img src="https://ui-avatars.com/api/?name=Admin&background=0284c7&color=fff" alt="User" />
+          </div>
         </div>
       </div>
+
+      {/* 2. FLOATING DRAWER (Sub-menu Panel) */}
+      <div 
+        className={`fixed left-20 top-0 h-full w-72 bg-white/95 backdrop-blur-md border-r border-slate-200 shadow-2xl transition-all duration-300 transform z-40 flex flex-col ${
+          activeGroupId ? 'translate-x-0 opacity-100' : '-translate-x-10 opacity-0 pointer-events-none'
+        }`}
+        onMouseEnter={() => setIsHoveringDrawer(true)}
+        onMouseLeave={() => {
+           setIsHoveringDrawer(false);
+           setActiveGroupId(null);
+        }}
+      >
+        {/* Drawer Header */}
+        {activeGroupId && (
+          <>
+             <div className="h-20 flex items-center px-6 border-b border-slate-100 bg-slate-50/50">
+               <div className="flex items-center gap-3 text-brand-700">
+                  {(() => {
+                    const group = menuStructure.find(g => g.id === activeGroupId);
+                    const Icon = group?.icon || CircleDot;
+                    return (
+                      <>
+                        <div className="p-2 bg-white rounded-lg shadow-sm">
+                          <Icon size={20} />
+                        </div>
+                        <h2 className="text-lg font-bold tracking-tight">{group?.label}</h2>
+                      </>
+                    );
+                  })()}
+               </div>
+             </div>
+
+             {/* Drawer Background Deco */}
+             <div className="absolute bottom-0 right-0 pointer-events-none opacity-5">
+               <Layers size={200} />
+             </div>
+
+             {/* Drawer Items */}
+             <div className="p-4 space-y-2 relative z-10 overflow-y-auto flex-1 custom-scrollbar">
+                {menuStructure.find(g => g.id === activeGroupId)?.items.map(item => {
+                  const isActive = currentView === item.id;
+                  const ItemIcon = item.icon || CircleDot;
+
+                  return (
+                    <button
+                      key={item.id}
+                      onClick={() => {
+                        onNavigate(item.id);
+                        setActiveGroupId(null);
+                      }}
+                      className={`w-full flex items-center justify-between p-3 rounded-xl text-sm font-medium transition-all group ${
+                        isActive
+                          ? 'bg-brand-50 text-brand-700 shadow-sm border border-brand-100'
+                          : 'text-slate-600 hover:bg-slate-50 hover:text-brand-600 border border-transparent hover:border-slate-100'
+                      }`}
+                    >
+                      <div className="flex items-center gap-3">
+                         <ItemIcon size={18} className={isActive ? 'text-brand-600' : 'text-slate-400 group-hover:text-brand-500'} />
+                         <span>{item.label}</span>
+                      </div>
+                      {isActive && <ChevronRight size={16} className="text-brand-400" />}
+                    </button>
+                  );
+                })}
+             </div>
+
+             {/* Quick Tip Footer */}
+             <div className="p-4 bg-slate-50 border-t border-slate-100 mt-auto">
+                <div className="flex items-start gap-3 p-3 bg-blue-50/50 rounded-lg border border-blue-100">
+                   <Info size={16} className="text-blue-500 mt-0.5 flex-shrink-0" />
+                   <div>
+                      <p className="text-xs font-bold text-blue-700 mb-0.5">Mẹo nhanh</p>
+                      <p className="text-[10px] text-blue-600/80 leading-relaxed">
+                         Bạn có thể nhấn phím tắt <span className="font-mono font-bold bg-white px-1 rounded border border-blue-200">Cmd+K</span> để tìm kiếm nhanh các chức năng.
+                      </p>
+                   </div>
+                </div>
+             </div>
+          </>
+        )}
+      </div>
+
     </div>
   );
 };

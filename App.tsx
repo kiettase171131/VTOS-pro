@@ -20,7 +20,6 @@ const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<ViewState>('DASHBOARD');
 
   // Helper to render content based on selection
-  // In the future, this is where we will route to the specific module screens
   const renderContent = () => {
     switch (currentView) {
       case 'DASHBOARD':
@@ -76,8 +75,11 @@ const App: React.FC = () => {
 
   return (
     <div className="flex h-screen w-screen overflow-hidden bg-slate-50">
+      {/* Sidebar is fixed width within its component, effectively taking 80px space */}
       <Sidebar currentView={currentView} onNavigate={setCurrentView} />
-      <main className="flex-1 flex flex-col h-full overflow-hidden transition-all duration-300">
+      
+      {/* Main Content Area */}
+      <main className="flex-1 flex flex-col h-full overflow-hidden relative z-0 transition-all duration-300">
         {renderContent()}
       </main>
     </div>
