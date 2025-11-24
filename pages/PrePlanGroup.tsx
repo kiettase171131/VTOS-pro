@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { 
   Search, 
@@ -13,7 +12,8 @@ import {
   Trash2, 
   Container,
   CheckCircle2,
-  Anchor
+  Anchor,
+  Cuboid
 } from 'lucide-react';
 
 export const PrePlanGroup: React.FC = () => {
@@ -44,28 +44,29 @@ export const PrePlanGroup: React.FC = () => {
   return (
     <div className="flex-1 h-screen flex flex-col bg-[#F3F6F9] overflow-hidden font-sans">
       
-      {/* Header */}
-      <header className="bg-white border-b border-slate-200 px-8 py-5 flex items-center justify-between flex-shrink-0 z-20">
-        <div>
-          <nav className="flex items-center gap-2 text-xs font-semibold text-slate-400 mb-1 uppercase tracking-wider">
-            <span className="hover:text-brand-600 cursor-pointer">Pre Planning</span>
-            <span className="text-slate-300">/</span>
+      {/* Light Theme Header */}
+      <header className="bg-white border-b border-slate-200 px-8 py-5 flex items-center justify-between flex-shrink-0 z-20 shadow-sm relative overflow-hidden">
+        <div className="relative z-10">
+          <nav className="flex items-center gap-2 text-xs font-semibold text-slate-500 mb-1 uppercase tracking-wider">
+            <span className="hover:text-brand-600 cursor-pointer transition-colors">Pre Planning</span>
+            <span className="text-slate-400">/</span>
             <span className="text-brand-600">Group Container</span>
           </nav>
           <div className="flex items-center gap-3">
-             <div className="bg-orange-50 p-2 rounded-lg text-orange-600">
-               <Layers size={24} />
+             <div className="bg-brand-50 backdrop-blur p-2 rounded-lg text-brand-600 animate-float">
+               <Cuboid size={24} />
              </div>
-             <h1 className="text-2xl font-bold text-slate-800 tracking-tight">Nhóm Container Xuất Tàu</h1>
+             <h1 className="text-2xl font-bold text-slate-800 tracking-tight">Nhóm Container Xuất</h1>
           </div>
         </div>
-        <div className="flex items-center gap-3 bg-white border border-slate-200 rounded-lg p-1">
-           <div className="flex items-center gap-2 px-3 py-1 bg-slate-100 rounded-md">
-             <Anchor size={16} className="text-slate-500" />
+        
+        <div className="relative z-10 flex items-center gap-3">
+           <div className="flex items-center gap-2 px-3 py-1.5 bg-slate-100 border border-slate-200 rounded-lg">
+             <Anchor size={16} className="text-brand-600" />
              <span className="text-sm font-bold text-slate-700">MAERSK HANOI</span>
+             <div className="h-4 w-px bg-slate-300 mx-1"></div>
+             <span className="text-sm font-medium text-slate-500">V.2304W</span>
            </div>
-           <div className="h-4 w-px bg-slate-300"></div>
-           <span className="text-sm font-medium text-slate-500 px-2">V.2304W</span>
         </div>
       </header>
 

@@ -87,44 +87,53 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentView, onNavigate }) => 
   ];
 
   return (
-    <div className="w-[280px] h-screen bg-[#0F172A] text-slate-300 flex flex-col shadow-2xl flex-shrink-0 relative font-sans border-r border-slate-800">
+    <div className="w-[280px] h-screen bg-white text-slate-600 flex flex-col shadow-xl flex-shrink-0 relative font-sans border-r border-slate-200 overflow-hidden z-50">
       
+      {/* 0. Light Theme Background Effects */}
+      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+         <div className="absolute inset-0 bg-gradient-to-b from-white via-slate-50 to-slate-100"></div>
+         {/* Bubbles */}
+         <div className="absolute -bottom-20 -left-20 w-64 h-64 bg-brand-50 rounded-full blur-3xl opacity-60"></div>
+         <div className="absolute top-20 -right-20 w-64 h-64 bg-blue-50 rounded-full blur-3xl opacity-60"></div>
+      </div>
+
       {/* 1. Brand Header */}
-      <div className="h-20 flex items-center px-6 border-b border-white/5 bg-[#0F172A] relative z-20">
+      <div className="h-20 flex items-center px-6 border-b border-slate-100 bg-white/80 backdrop-blur-sm relative z-20">
         <div className="flex items-center gap-3 group cursor-pointer w-full">
           <div className="relative">
-            <div className="w-10 h-10 bg-gradient-to-tr from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/20 group-hover:shadow-blue-500/40 transition-all duration-300 relative z-10">
-              <Layers className="text-white w-6 h-6" />
+            <div className="w-10 h-10 bg-gradient-to-tr from-brand-600 to-brand-700 rounded-xl flex items-center justify-center shadow-lg shadow-brand-200 group-hover:shadow-brand-300 transition-all duration-300 relative z-10">
+              <Layers className="text-white w-6 h-6 group-hover:animate-float" />
             </div>
-            {/* Glow effect */}
-            <div className="absolute inset-0 bg-blue-500 blur-lg opacity-20 group-hover:opacity-40 transition-opacity rounded-xl"></div>
           </div>
           <div>
-            <h1 className="font-bold text-white text-xl tracking-tight leading-none">VTOS <span className="text-blue-500 font-extrabold">PRO</span></h1>
-            <p className="text-[10px] text-slate-500 font-semibold tracking-widest mt-0.5 uppercase">Terminal OS</p>
+            <h1 className="font-extrabold text-slate-800 text-xl tracking-tight leading-none">VTOS <span className="text-brand-600">PRO</span></h1>
+            <p className="text-[10px] text-slate-400 font-bold tracking-widest mt-0.5 uppercase">Terminal OS</p>
           </div>
         </div>
       </div>
 
       {/* 2. Scrollable Navigation */}
-      <nav className="flex-1 overflow-y-auto custom-scrollbar py-6 px-4 space-y-8 relative z-10">
+      <nav className="flex-1 overflow-y-auto custom-scrollbar py-6 px-4 space-y-6 relative z-10">
         
         {/* Dashboard Section */}
         <div className="space-y-2">
-          <p className="px-3 text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2">Main</p>
+          <p className="px-3 text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Main</p>
           <button
             onClick={() => onNavigate('DASHBOARD')}
             className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 group relative overflow-hidden ${
               currentView === 'DASHBOARD' 
-                ? 'bg-blue-600 text-white shadow-lg shadow-blue-900/50' 
-                : 'text-slate-400 hover:text-white hover:bg-white/5'
+                ? 'bg-brand-600 text-white shadow-lg shadow-brand-200' 
+                : 'text-slate-500 hover:text-brand-600 hover:bg-brand-50'
             }`}
           >
-            <LayoutDashboard size={20} className={`${currentView === 'DASHBOARD' ? 'text-white' : 'text-slate-500 group-hover:text-white'} transition-colors`} />
-            <span className="font-medium text-sm">Tổng quan</span>
-            {currentView === 'DASHBOARD' && (
-              <div className="absolute right-0 top-0 bottom-0 w-1 bg-white/20"></div>
-            )}
+            <LayoutDashboard 
+              size={20} 
+              className={`
+                transition-all duration-300 ease-in-out
+                ${currentView === 'DASHBOARD' ? 'text-white scale-110' : 'text-slate-400 group-hover:text-brand-600 group-hover:scale-110 group-hover:rotate-3'}
+              `} 
+            />
+            <span className="font-bold text-sm">Tổng quan</span>
           </button>
         </div>
 
@@ -138,44 +147,54 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentView, onNavigate }) => 
             <div key={group.id} className="space-y-1">
                <div 
                  onClick={() => toggleGroup(group.id)}
-                 className={`flex items-center justify-between px-3 py-2 cursor-pointer group select-none transition-colors rounded-lg ${isActiveParent ? 'text-blue-400' : 'text-slate-500 hover:text-slate-200 hover:bg-white/5'}`}
+                 className={`flex items-center justify-between px-3 py-2 cursor-pointer group select-none transition-colors rounded-lg ${isActiveParent ? 'text-brand-700 bg-brand-50' : 'text-slate-500 hover:text-brand-600 hover:bg-slate-50'}`}
                >
                   <div className="flex items-center gap-3">
-                     <Icon size={18} className={`transition-colors ${isActiveParent ? 'text-blue-400' : 'text-slate-600 group-hover:text-slate-400'}`} />
+                     <Icon 
+                       size={18} 
+                       className={`
+                         transition-all duration-300 ease-in-out
+                         ${isActiveParent ? 'text-brand-600' : 'text-slate-400 group-hover:text-brand-500'}
+                         ${isExpanded ? 'scale-105' : ''}
+                         group-hover:scale-110 group-hover:-rotate-6
+                       `} 
+                     />
                      <span className="text-xs font-bold uppercase tracking-wider">{group.label}</span>
                   </div>
-                  <ChevronDown size={14} className={`transition-transform duration-300 ${isExpanded ? 'rotate-0' : '-rotate-90'}`} />
+                  <ChevronDown size={14} className={`transition-transform duration-300 ${isExpanded ? 'rotate-0 text-slate-400' : '-rotate-90 text-slate-300'}`} />
                </div>
 
                {/* Animated Submenu */}
-               <div className={`overflow-hidden transition-all duration-300 ease-in-out ${isExpanded ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'}`}>
-                  <div className="space-y-1 pt-1 pb-2">
-                    {group.items.map(item => {
-                      const isActive = currentView === item.id;
-                      const ItemIcon = item.icon || CircleDot;
-                      
-                      return (
-                        <button
-                          key={item.id}
-                          onClick={() => onNavigate(item.id)}
-                          className={`
-                            w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all duration-200 relative ml-2 border-l-2
-                            ${isActive 
-                              ? 'border-blue-500 bg-blue-500/10 text-blue-300' 
-                              : 'border-slate-800 text-slate-400 hover:text-slate-200 hover:border-slate-600 hover:bg-white/5'
-                            }
-                          `}
-                        >
-                           <span className={`transition-all ${isActive ? 'text-blue-400 scale-110' : 'text-slate-600 group-hover:text-slate-400'}`}>
-                             <ItemIcon size={16} />
-                           </span>
-                           <span className={`truncate ${isActive ? 'font-medium' : ''}`}>{item.label}</span>
-                           
-                           {/* Active Glow Background */}
-                           {isActive && <div className="absolute inset-0 bg-blue-400/5 rounded-lg pointer-events-none"></div>}
-                        </button>
-                      )
-                    })}
+               <div className={`grid transition-[grid-template-rows] duration-300 ease-in-out ${isExpanded ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
+                  <div className="overflow-hidden">
+                    <div className="space-y-1 pt-1 pb-2">
+                      {group.items.map(item => {
+                        const isActive = currentView === item.id;
+                        const ItemIcon = item.icon || CircleDot;
+                        
+                        return (
+                          <button
+                            key={item.id}
+                            onClick={() => onNavigate(item.id)}
+                            className={`
+                              w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all duration-200 relative ml-2 border-l-2 group
+                              ${isActive 
+                                ? 'border-brand-500 bg-brand-50 text-brand-700 font-bold' 
+                                : 'border-slate-200 text-slate-500 hover:text-brand-600 hover:border-brand-300 hover:bg-slate-50'
+                              }
+                            `}
+                          >
+                             <span className={`
+                               inline-block transition-all duration-300 ease-out transform origin-center
+                               ${isActive ? 'text-brand-600 scale-110 rotate-0' : 'text-slate-400 group-hover:text-brand-500 group-hover:scale-110 group-hover:rotate-6'}
+                             `}>
+                               <ItemIcon size={16} />
+                             </span>
+                             <span className={`truncate transition-all duration-300 ${isActive ? '' : 'group-hover:translate-x-1'}`}>{item.label}</span>
+                          </button>
+                        )
+                      })}
+                    </div>
                   </div>
                </div>
             </div>
@@ -184,19 +203,19 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentView, onNavigate }) => 
       </nav>
 
       {/* 3. Footer Profile */}
-      <div className="p-4 border-t border-white/5 bg-[#0B1121] relative z-20">
-        <div className="bg-slate-800/40 rounded-xl p-3 border border-white/5 flex items-center gap-3 hover:border-white/10 hover:bg-slate-800/60 transition-all cursor-pointer group">
+      <div className="p-4 border-t border-slate-100 bg-white relative z-20">
+        <div className="bg-slate-50 rounded-xl p-3 border border-slate-200 flex items-center gap-3 hover:border-brand-200 hover:bg-brand-50/50 transition-all cursor-pointer group">
            <div className="relative">
-              <div className="w-10 h-10 rounded-lg bg-gradient-to-b from-slate-700 to-slate-900 p-[1px] shadow-inner">
-                <img src="https://ui-avatars.com/api/?name=Admin&background=0F172A&color=fff" className="w-full h-full rounded-lg object-cover" alt="Profile" />
+              <div className="w-10 h-10 rounded-lg bg-white p-[2px] shadow-sm border border-slate-100 group-hover:scale-105 transition-transform duration-300">
+                <img src="https://ui-avatars.com/api/?name=Admin&background=0284c7&color=fff" className="w-full h-full rounded-md object-cover" alt="Profile" />
               </div>
-              <span className="absolute -bottom-1 -right-1 w-3 h-3 bg-emerald-500 border-2 border-[#0B1121] rounded-full shadow-sm"></span>
+              <span className="absolute -bottom-1 -right-1 w-3 h-3 bg-emerald-500 border-2 border-white rounded-full shadow-sm"></span>
            </div>
            <div className="flex-1 overflow-hidden">
-              <h4 className="text-sm font-bold text-white truncate group-hover:text-blue-400 transition-colors">Sang Nguyen</h4>
-              <p className="text-[10px] font-medium text-slate-500 truncate uppercase tracking-wider">Senior Planner</p>
+              <h4 className="text-sm font-bold text-slate-800 truncate group-hover:text-brand-700 transition-colors">Sang Nguyen</h4>
+              <p className="text-[10px] font-bold text-slate-400 truncate uppercase tracking-wider">Senior Planner</p>
            </div>
-           <Settings size={16} className="text-slate-600 group-hover:text-white transition-colors" />
+           <Settings size={16} className="text-slate-400 group-hover:text-brand-600 group-hover:rotate-90 transition-all duration-500" />
         </div>
       </div>
     </div>

@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { 
   Settings, 
@@ -31,10 +30,10 @@ export const CraneSplit: React.FC = () => {
   return (
     <div className="flex-1 h-screen flex flex-col bg-[#F0F2F5] overflow-hidden font-sans">
       
-      {/* 1. Modern Header */}
-      <header className="bg-white/80 backdrop-blur-md border-b border-slate-200 px-6 py-4 flex items-center justify-between flex-shrink-0 z-30 sticky top-0">
-         <div className="flex items-center gap-4">
-            <div className="bg-brand-600 text-white p-2 rounded-lg shadow-lg shadow-brand-500/30">
+      {/* 1. Light Theme Header */}
+      <header className="bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between flex-shrink-0 z-30 sticky top-0 shadow-sm relative overflow-hidden">
+         <div className="flex items-center gap-4 relative z-10">
+            <div className="bg-brand-600 text-white p-2 rounded-lg shadow-lg shadow-brand-200 animate-float">
               <Layout size={20} />
             </div>
             <div>
@@ -53,22 +52,22 @@ export const CraneSplit: React.FC = () => {
             </div>
          </div>
          
-         <div className="flex items-center gap-3">
+         <div className="flex items-center gap-3 relative z-10">
             <div className="flex bg-slate-100 p-1 rounded-lg border border-slate-200">
                <button 
                  onClick={() => setViewMode('VISUAL')}
-                 className={`px-3 py-1.5 rounded-md text-xs font-bold transition-all flex items-center gap-2 ${viewMode === 'VISUAL' ? 'bg-white text-brand-700 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                 className={`px-3 py-1.5 rounded-md text-xs font-bold transition-all flex items-center gap-2 ${viewMode === 'VISUAL' ? 'bg-white text-brand-700 shadow-sm border border-slate-200' : 'text-slate-500 hover:text-slate-800'}`}
                >
                  <Layout size={14} /> Visual
                </button>
                <button 
                  onClick={() => setViewMode('LIST')}
-                 className={`px-3 py-1.5 rounded-md text-xs font-bold transition-all flex items-center gap-2 ${viewMode === 'LIST' ? 'bg-white text-brand-700 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                 className={`px-3 py-1.5 rounded-md text-xs font-bold transition-all flex items-center gap-2 ${viewMode === 'LIST' ? 'bg-white text-brand-700 shadow-sm border border-slate-200' : 'text-slate-500 hover:text-slate-800'}`}
                >
                  <List size={14} /> List
                </button>
             </div>
-            <button className="bg-slate-800 hover:bg-slate-900 text-white px-4 py-2 rounded-lg text-sm font-bold shadow-md transition-all flex items-center gap-2">
+            <button className="bg-white hover:bg-slate-50 text-slate-600 px-4 py-2 rounded-lg text-sm font-bold shadow-sm transition-all flex items-center gap-2 border border-slate-200">
                <Settings size={16} /> Cấu hình
             </button>
          </div>
@@ -256,7 +255,7 @@ export const CraneSplit: React.FC = () => {
 
            {/* Action Footer */}
            <div className="p-5 border-t border-slate-200 bg-white">
-              <button className="w-full py-3 bg-brand-900 hover:bg-brand-800 text-white rounded-xl text-sm font-bold shadow-lg shadow-brand-900/20 transition-all flex items-center justify-center gap-2">
+              <button className="w-full py-3 bg-brand-700 hover:bg-brand-800 text-white rounded-xl text-sm font-bold shadow-lg shadow-brand-200 transition-all flex items-center justify-center gap-2">
                  <CheckCircle2 size={18} />
                  Xác Nhận Phân Bổ
               </button>

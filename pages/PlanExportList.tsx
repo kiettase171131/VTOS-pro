@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { 
   Search, 
@@ -11,7 +10,8 @@ import {
   Truck, 
   Package, 
   Scale,
-  Database
+  Database,
+  ClipboardList
 } from 'lucide-react';
 
 export const PlanExportList: React.FC = () => {
@@ -28,24 +28,32 @@ export const PlanExportList: React.FC = () => {
   return (
     <div className="flex-1 h-screen flex flex-col bg-[#F3F6F9] overflow-hidden font-sans">
       
-      {/* Header */}
-      <header className="bg-white border-b border-slate-200 px-8 py-5 flex items-center justify-between flex-shrink-0 z-20">
-        <div>
-          <nav className="flex items-center gap-2 text-xs font-semibold text-slate-400 mb-1 uppercase tracking-wider">
-            <span className="hover:text-brand-600 cursor-pointer">Kế hoạch</span>
-            <span className="text-slate-300">/</span>
+      {/* Light Theme Header */}
+      <header className="bg-white border-b border-slate-200 px-8 py-5 flex items-center justify-between flex-shrink-0 z-20 shadow-sm relative overflow-hidden">
+        <div className="relative z-10">
+          <nav className="flex items-center gap-2 text-xs font-semibold text-slate-500 mb-1 uppercase tracking-wider">
+            <span className="hover:text-brand-600 cursor-pointer transition-colors">Kế hoạch</span>
+            <span className="text-slate-400">/</span>
             <span className="text-brand-600">Container Xuất</span>
           </nav>
           <div className="flex items-center gap-3">
-             <h1 className="text-2xl font-bold text-slate-800 tracking-tight">Danh Sách Container Xuất Tàu</h1>
-             <span className="bg-brand-50 text-brand-700 border border-brand-200 text-xs font-bold px-3 py-1 rounded-full">MAERSK HANOI / 2304W</span>
+             <div className="bg-brand-50 backdrop-blur p-2 rounded-lg text-brand-600 animate-float">
+               <ClipboardList size={24} />
+             </div>
+             <h1 className="text-2xl font-bold text-slate-800 tracking-tight">Danh Sách Container Xuất</h1>
           </div>
         </div>
-        <div className="flex gap-3">
-           <button className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 hover:text-brand-600 rounded-lg text-sm font-medium transition-colors">
-              <Download size={16} /> Export Excel
+        
+        <div className="relative z-10 flex items-center gap-3">
+            <span className="bg-slate-100 border border-slate-200 text-brand-600 text-xs font-bold px-3 py-1.5 rounded-full flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+              MAERSK HANOI / 2304W
+            </span>
+            <div className="h-8 w-px bg-slate-200 mx-1"></div>
+           <button className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 hover:text-slate-800 rounded-lg text-sm font-medium transition-colors shadow-sm">
+              <Download size={16} /> <span className="hidden sm:inline">Export</span>
            </button>
-           <button className="flex items-center gap-2 px-5 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-lg text-sm font-bold shadow-lg shadow-brand-500/30 transition-all">
+           <button className="flex items-center gap-2 px-5 py-2 bg-brand-600 hover:bg-brand-500 text-white rounded-lg text-sm font-bold shadow-lg shadow-brand-200 transition-all transform hover:-translate-y-0.5">
               <Plus size={18} /> Thêm Mới
            </button>
         </div>

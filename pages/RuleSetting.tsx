@@ -10,8 +10,6 @@ import {
   Anchor,
   Settings2,
   AlertCircle,
-  CheckCircle2,
-  Ship,
   ArrowUpDown
 } from 'lucide-react';
 
@@ -59,36 +57,36 @@ export const RuleSetting: React.FC = () => {
   return (
     <div className="flex-1 h-screen flex flex-col bg-[#F3F6F9] overflow-hidden font-sans">
       
-      {/* 1. Modern Header Section */}
-      <header className="bg-white border-b border-slate-200 px-8 py-5 flex items-center justify-between flex-shrink-0 z-20 shadow-sm relative">
-        <div>
-          <nav className="flex items-center gap-2 text-xs font-semibold text-slate-400 mb-1 uppercase tracking-wider">
+      {/* 1. Light Theme Header */}
+      <header className="bg-white border-b border-slate-200 px-8 py-5 flex items-center justify-between flex-shrink-0 z-20 shadow-sm relative overflow-hidden">
+        <div className="relative z-10">
+          <nav className="flex items-center gap-2 text-xs font-semibold text-slate-500 mb-1 uppercase tracking-wider">
             <span className="hover:text-brand-600 cursor-pointer transition-colors">Hệ thống</span>
-            <span className="text-slate-300">/</span>
+            <span className="text-slate-400">/</span>
             <span className="text-brand-600">Thiết lập quy luật</span>
           </nav>
           <div className="flex items-center gap-3">
-             <div className="bg-brand-50 p-2 rounded-lg text-brand-600">
+             <div className="bg-brand-50 p-2 rounded-lg text-brand-600 animate-float">
                <Settings2 size={24} />
              </div>
              <h1 className="text-2xl font-bold text-slate-800 tracking-tight">Quản Lý Quy Luật Bến</h1>
           </div>
         </div>
         
-        <div className="flex items-center gap-4">
+        <div className="relative z-10 flex items-center gap-4">
            {/* Quick Stats in Header */}
            <div className="hidden lg:flex items-center gap-6 mr-6 border-r border-slate-200 pr-6">
               <div className="text-right">
-                <p className="text-xs text-slate-500 font-medium uppercase">Tổng bến</p>
+                <p className="text-xs text-slate-400 font-bold uppercase">Tổng bến</p>
                 <p className="text-xl font-bold text-slate-800 leading-none">09</p>
               </div>
               <div className="text-right">
-                <p className="text-xs text-slate-500 font-medium uppercase">Hoạt động</p>
+                <p className="text-xs text-slate-400 font-bold uppercase">Hoạt động</p>
                 <p className="text-xl font-bold text-emerald-600 leading-none">07</p>
               </div>
            </div>
            
-           <button className="flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg text-sm font-medium transition-colors">
+           <button className="flex items-center gap-2 px-4 py-2 bg-white hover:bg-slate-50 text-slate-600 rounded-lg text-sm font-medium transition-colors border border-slate-200 shadow-sm">
               <AlertCircle size={16} />
               <span>Hướng dẫn</span>
            </button>

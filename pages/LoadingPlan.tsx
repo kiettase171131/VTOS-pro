@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { 
   ZoomIn, 
@@ -9,7 +8,8 @@ import {
   ChevronLeft, 
   Search,
   Box,
-  AlertTriangle
+  AlertTriangle,
+  ArrowUpFromLine
 } from 'lucide-react';
 
 export const LoadingPlan: React.FC = () => {
@@ -18,24 +18,32 @@ export const LoadingPlan: React.FC = () => {
   return (
     <div className="flex-1 h-screen flex flex-col bg-[#1e293b] overflow-hidden font-sans relative">
        
-       {/* Dark Mode Header */}
-       <header className="bg-[#0f172a] border-b border-slate-800 px-6 py-4 flex items-center justify-between z-30 shadow-lg">
-          <div className="flex items-center gap-4">
-             <div className="bg-blue-600 text-white p-2 rounded-lg">
-                <Layers size={20} />
+       {/* Light Theme Header (Consistent) */}
+       <header className="bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between z-30 shadow-md relative overflow-hidden">
+          <div className="flex items-center gap-4 relative z-10">
+             <div className="bg-brand-50 text-brand-600 p-2 rounded-lg shadow-sm animate-float">
+                <ArrowUpFromLine size={20} />
              </div>
              <div>
-                <h1 className="text-white font-bold text-lg tracking-wide">Kế Hoạch Xếp Container</h1>
-                <p className="text-slate-400 text-xs">MAERSK HANOI • Bay 05 (Deck)</p>
+                <nav className="flex items-center gap-2 text-xs font-semibold text-slate-500 mb-0.5 uppercase tracking-wider">
+                  <span className="text-slate-400">Kế hoạch</span>
+                  <span className="text-slate-300">/</span>
+                  <span className="text-brand-600">Xếp Container</span>
+                </nav>
+                <div className="flex items-center gap-2">
+                   <h1 className="text-slate-800 font-bold text-lg tracking-wide">Stowage Planning</h1>
+                   <span className="bg-slate-100 border border-slate-200 text-slate-600 text-[10px] font-bold px-2 py-0.5 rounded">MAERSK HANOI</span>
+                </div>
              </div>
           </div>
-          <div className="flex items-center gap-4">
-             <div className="flex items-center bg-slate-800 rounded-lg p-1 border border-slate-700">
-                <button className="p-2 text-slate-400 hover:text-white hover:bg-slate-700 rounded"><ZoomOut size={18} /></button>
-                <span className="text-xs font-mono text-slate-300 px-2">100%</span>
-                <button className="p-2 text-slate-400 hover:text-white hover:bg-slate-700 rounded"><ZoomIn size={18} /></button>
+          
+          <div className="flex items-center gap-4 relative z-10">
+             <div className="flex items-center bg-slate-100 rounded-lg p-1 border border-slate-200">
+                <button className="p-2 text-slate-400 hover:text-brand-600 hover:bg-white rounded transition-colors"><ZoomOut size={18} /></button>
+                <span className="text-xs font-mono text-slate-600 px-2 min-w-[3rem] text-center">100%</span>
+                <button className="p-2 text-slate-400 hover:text-brand-600 hover:bg-white rounded transition-colors"><ZoomIn size={18} /></button>
              </div>
-             <button className="bg-emerald-600 hover:bg-emerald-500 text-white px-5 py-2 rounded-lg text-sm font-bold shadow-lg shadow-emerald-900/20 transition-all">
+             <button className="bg-emerald-600 hover:bg-emerald-500 text-white px-5 py-2 rounded-lg text-sm font-bold shadow-lg shadow-emerald-200 transition-all transform active:scale-95">
                 Lưu Kế Hoạch
              </button>
           </div>

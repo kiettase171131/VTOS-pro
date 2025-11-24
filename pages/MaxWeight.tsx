@@ -28,26 +28,35 @@ export const MaxWeight: React.FC = () => {
   const [rows, setRows] = useState(MOCK_ROWS);
   const [searchTerm, setSearchTerm] = useState('');
 
-  // Handle weight change simulation
-  const handleWeightChange = (id: number, val: string) => {
-    // In a real app, this would update state based on ID
-    // setRows(rows.map(r => r.id === id ? { ...r, weight: Number(val) } : r));
-  };
-
   // ----------------------------------------------------------------------
   // VIEW 1: VESSEL SELECTION PORTAL
   // ----------------------------------------------------------------------
   if (!selectedVessel) {
     return (
       <div className="flex-1 h-screen bg-[#F3F6F9] flex flex-col font-sans overflow-hidden">
-        {/* Header */}
-        <div className="bg-white border-b border-slate-200 px-8 py-5 flex-shrink-0">
-          <h1 className="text-2xl font-bold text-slate-800">Thiết Lập Trọng Lượng Tối Đa</h1>
-          <p className="text-slate-500 text-sm mt-1">Chọn tàu để bắt đầu cấu hình giới hạn trọng lượng cho từng Bay/Row.</p>
-        </div>
+        {/* Light Theme Header */}
+        <header className="bg-white border-b border-slate-200 px-8 py-5 flex items-center justify-between flex-shrink-0 z-20 shadow-sm relative overflow-hidden">
+          <div className="relative z-10">
+            <nav className="flex items-center gap-2 text-xs font-semibold text-slate-500 mb-1 uppercase tracking-wider">
+              <span className="hover:text-brand-600 cursor-pointer transition-colors">Định dạng</span>
+              <span className="text-slate-400">/</span>
+              <span className="text-brand-600">Trọng lượng tối đa</span>
+            </nav>
+            <div className="flex items-center gap-3">
+               <div className="bg-brand-50 backdrop-blur p-2 rounded-lg text-brand-600 animate-float">
+                 <Weight size={24} />
+               </div>
+               <h1 className="text-2xl font-bold text-slate-800 tracking-tight">Thiết Lập Trọng Lượng</h1>
+            </div>
+          </div>
+        </header>
 
-        <div className="flex-1 overflow-y-auto p-8">
+        <div className="flex-1 overflow-y-auto p-8 custom-scrollbar">
           <div className="max-w-6xl mx-auto space-y-8">
+            <div className="text-center mb-8">
+              <h2 className="text-xl font-bold text-slate-700">Chọn tàu để bắt đầu cấu hình</h2>
+              <p className="text-slate-500">Vui lòng chọn tàu từ danh sách bên dưới để thiết lập giới hạn trọng lượng cho từng Bay/Row.</p>
+            </div>
             
             {/* Search Bar */}
             <div className="relative max-w-2xl mx-auto w-full group">
@@ -117,12 +126,13 @@ export const MaxWeight: React.FC = () => {
   return (
     <div className="flex-1 h-screen flex flex-col bg-[#F3F6F9] overflow-hidden font-sans">
       
-      {/* Header */}
-      <header className="bg-white border-b border-slate-200 px-6 py-3 flex items-center justify-between flex-shrink-0 z-20 shadow-sm">
-        <div className="flex items-center gap-4">
+      {/* Light Theme Header (Config Mode) */}
+      <header className="bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between flex-shrink-0 z-20 shadow-sm relative overflow-hidden">
+        
+        <div className="flex items-center gap-4 relative z-10">
           <button 
             onClick={() => setSelectedVessel(null)}
-            className="w-10 h-10 flex items-center justify-center hover:bg-slate-100 rounded-xl text-slate-500 transition-colors border border-transparent hover:border-slate-200"
+            className="w-10 h-10 flex items-center justify-center bg-white border border-slate-200 hover:bg-slate-50 rounded-xl text-slate-600 transition-colors shadow-sm"
             title="Quay lại danh sách"
           >
             <ArrowLeft size={20} />
@@ -131,29 +141,29 @@ export const MaxWeight: React.FC = () => {
           <div className="h-8 w-px bg-slate-200 mx-1"></div>
           
           <div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-3">
               <h1 className="text-lg font-bold text-slate-800">{selectedVessel.name}</h1>
-              <span className="text-xs font-bold text-slate-500 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded">
+              <span className="text-xs font-bold text-brand-600 bg-brand-50 border border-brand-200 px-2 py-0.5 rounded">
                 {selectedVessel.voyage}
               </span>
             </div>
-            <p className="text-xs text-slate-400 flex items-center gap-1">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+            <p className="text-xs text-slate-500 flex items-center gap-1">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
               Đang chỉnh sửa trực tuyến
             </p>
           </div>
         </div>
         
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 relative z-10">
           <div className="text-right mr-4 hidden md:block">
             <p className="text-xs text-slate-400 uppercase font-bold">Lần sửa cuối</p>
             <p className="text-xs font-medium text-slate-700">10:42 AM - Bởi Admin</p>
           </div>
-          <button className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 rounded-lg text-sm font-medium transition-all shadow-sm">
+          <button className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 rounded-lg text-sm font-medium transition-all shadow-sm">
             <RefreshCw size={16} />
             <span className="hidden sm:inline">Làm mới</span>
           </button>
-          <button className="flex items-center gap-2 px-5 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-lg text-sm font-semibold shadow-lg shadow-brand-500/30 transition-all transform active:scale-95">
+          <button className="flex items-center gap-2 px-5 py-2 bg-brand-600 hover:bg-brand-500 text-white rounded-lg text-sm font-semibold shadow-lg shadow-brand-200 transition-all transform active:scale-95">
             <Save size={18} />
             Lưu thay đổi
           </button>

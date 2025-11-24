@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { 
   Printer, 
@@ -22,15 +21,18 @@ export const PlanPrint: React.FC = () => {
 
   return (
     <div className="flex-1 h-screen flex flex-col bg-[#F3F6F9] overflow-hidden font-sans">
-       {/* Header */}
-       <header className="bg-white border-b border-slate-200 px-8 py-5 flex items-center justify-between flex-shrink-0 z-20">
-        <div>
-          <nav className="flex items-center gap-2 text-xs font-semibold text-slate-400 mb-1 uppercase tracking-wider">
-            <span className="hover:text-brand-600 cursor-pointer">Kế hoạch</span>
-            <span className="text-slate-300">/</span>
+       {/* Light Theme Header */}
+       <header className="bg-white border-b border-slate-200 px-8 py-5 flex items-center justify-between flex-shrink-0 z-20 shadow-sm relative overflow-hidden">
+        <div className="relative z-10">
+          <nav className="flex items-center gap-2 text-xs font-semibold text-slate-500 mb-1 uppercase tracking-wider">
+            <span className="hover:text-brand-600 cursor-pointer transition-colors">Kế hoạch</span>
+            <span className="text-slate-400">/</span>
             <span className="text-brand-600">In Ấn</span>
           </nav>
           <div className="flex items-center gap-3">
+             <div className="bg-brand-50 backdrop-blur p-2 rounded-lg text-brand-600 animate-float">
+               <Printer size={24} />
+             </div>
              <h1 className="text-2xl font-bold text-slate-800 tracking-tight">Xuất Báo Cáo & In Ấn</h1>
           </div>
         </div>

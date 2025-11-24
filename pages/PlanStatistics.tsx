@@ -48,18 +48,18 @@ export const PlanStatistics: React.FC = () => {
   return (
     <div className="flex-1 h-screen flex flex-col bg-[#F3F6F9] overflow-hidden font-sans">
       
-      {/* 1. Header with Context */}
-      <header className="bg-white border-b border-slate-200 px-8 py-5 flex-shrink-0 z-20 shadow-sm">
-        <div className="flex justify-between items-start">
+      {/* 1. Light Theme Header */}
+      <header className="bg-white border-b border-slate-200 px-8 py-5 flex-shrink-0 z-20 shadow-sm relative overflow-hidden">
+        <div className="flex justify-between items-start relative z-10">
           <div>
-             <nav className="flex items-center gap-2 text-xs font-semibold text-slate-400 mb-1 uppercase tracking-wider">
+             <nav className="flex items-center gap-2 text-xs font-semibold text-slate-500 mb-1 uppercase tracking-wider">
               <span className="hover:text-brand-600 cursor-pointer transition-colors">Kế hoạch</span>
-              <span className="text-slate-300">/</span>
+              <span className="text-slate-400">/</span>
               <span className="text-brand-600">Thống kê xếp dỡ</span>
             </nav>
             <div className="flex items-center gap-3">
               <h1 className="text-2xl font-bold text-slate-800 tracking-tight">Thống Kê Kế Hoạch</h1>
-              <span className="bg-slate-100 text-slate-600 px-3 py-1 rounded-full text-xs font-bold border border-slate-200 flex items-center gap-1">
+              <span className="bg-slate-100 text-slate-600 px-3 py-1 rounded-full text-xs font-bold border border-slate-200 flex items-center gap-1 animate-float">
                 <Ship size={12} /> MAERSK HANOI / 2304W
               </span>
             </div>
@@ -69,7 +69,7 @@ export const PlanStatistics: React.FC = () => {
              <button className="p-2 text-slate-400 hover:text-brand-600 hover:bg-slate-50 rounded-lg transition-colors">
                <RefreshCw size={20} />
              </button>
-             <button className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 rounded-lg text-sm font-medium transition-all shadow-sm">
+             <button className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 rounded-lg text-sm font-medium transition-all shadow-sm">
                <Download size={16} />
                Xuất báo cáo
              </button>
@@ -82,25 +82,27 @@ export const PlanStatistics: React.FC = () => {
         {/* 2. Top Metrics Dashboard */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {/* Total Moves */}
-          <div className="bg-white rounded-xl p-5 border border-slate-200 shadow-sm flex items-center justify-between">
+          <div className="bg-white rounded-xl p-5 border border-slate-200 shadow-sm flex items-center justify-between hover:translate-y-[-2px] transition-transform">
              <div>
                 <p className="text-slate-500 text-xs font-bold uppercase mb-1">Tổng Moves</p>
                 <h3 className="text-2xl font-bold text-slate-800">{stats.totalMoves.toLocaleString()}</h3>
                 <p className="text-xs text-slate-400 mt-1">Dự kiến hoàn thành: <span className="font-medium text-slate-600">{stats.eta}</span></p>
              </div>
-             <div className="w-12 h-12 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center">
+             <div className="w-12 h-12 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center animate-float">
                 <Box size={24} />
              </div>
           </div>
 
           {/* Completion Progress */}
-          <div className="bg-white rounded-xl p-5 border border-slate-200 shadow-sm flex flex-col justify-center">
+          <div className="bg-white rounded-xl p-5 border border-slate-200 shadow-sm flex flex-col justify-center hover:translate-y-[-2px] transition-transform">
              <div className="flex justify-between items-end mb-2">
                 <p className="text-slate-500 text-xs font-bold uppercase">Tiến độ</p>
                 <span className="text-emerald-600 font-bold text-xl">34%</span>
              </div>
              <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
-                <div className="h-full bg-emerald-500 rounded-full w-[34%]"></div>
+                <div className="h-full bg-emerald-500 rounded-full w-[34%] relative overflow-hidden">
+                   <div className="absolute inset-0 bg-white/20 w-full animate-pulse"></div>
+                </div>
              </div>
              <p className="text-xs text-slate-400 mt-2 flex justify-between">
                 <span>Completed: {stats.completed}</span>
@@ -109,7 +111,7 @@ export const PlanStatistics: React.FC = () => {
           </div>
 
           {/* Crane Efficiency */}
-          <div className="bg-white rounded-xl p-5 border border-slate-200 shadow-sm flex items-center justify-between">
+          <div className="bg-white rounded-xl p-5 border border-slate-200 shadow-sm flex items-center justify-between hover:translate-y-[-2px] transition-transform">
              <div>
                 <p className="text-slate-500 text-xs font-bold uppercase mb-1">Năng suất TB</p>
                 <h3 className="text-2xl font-bold text-slate-800">{stats.efficiency}</h3>
@@ -117,19 +119,19 @@ export const PlanStatistics: React.FC = () => {
                    <ArrowUp size={12} /> +2.4% so với định mức
                 </p>
              </div>
-             <div className="w-12 h-12 rounded-full bg-purple-50 text-purple-600 flex items-center justify-center">
+             <div className="w-12 h-12 rounded-full bg-purple-50 text-purple-600 flex items-center justify-center animate-float-delayed">
                 <Clock size={24} />
              </div>
           </div>
 
           {/* Special Cargo */}
-          <div className="bg-white rounded-xl p-5 border border-slate-200 shadow-sm flex items-center justify-between">
+          <div className="bg-white rounded-xl p-5 border border-slate-200 shadow-sm flex items-center justify-between hover:translate-y-[-2px] transition-transform">
              <div>
                 <p className="text-slate-500 text-xs font-bold uppercase mb-1">Hàng đặc biệt</p>
                 <h3 className="text-2xl font-bold text-slate-800">45 <span className="text-sm font-normal text-slate-400">Conts</span></h3>
                 <p className="text-xs text-amber-600 mt-1 font-medium">Cần lưu ý: DG, OOG</p>
              </div>
-             <div className="w-12 h-12 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center">
+             <div className="w-12 h-12 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center animate-float">
                 <CheckCircle2 size={24} />
              </div>
           </div>

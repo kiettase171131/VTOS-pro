@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { 
   Save, 
@@ -16,7 +15,8 @@ import {
   Grid3X3,
   Unlock,
   Lock,
-  Eraser
+  Eraser,
+  PencilRuler
 } from 'lucide-react';
 
 // Define the cell structure
@@ -41,7 +41,6 @@ export const ShipDesign: React.FC = () => {
   });
 
   // Mock Grid Generation (10 Rows x 14 Cols)
-  // Rows 0-4 = Deck, Rows 5-9 = Hold
   const generateGrid = () => {
     const grid: Cell[] = [];
     for (let r = 0; r < 10; r++) {
@@ -83,254 +82,275 @@ export const ShipDesign: React.FC = () => {
   };
 
   return (
-    <div className="flex-1 h-screen flex bg-[#F0F4F8] font-sans overflow-hidden">
+    <div className="flex-1 h-screen flex flex-col bg-[#F0F4F8] font-sans overflow-hidden">
       
-      {/* LEFT SIDEBAR - CONTROLS */}
-      <div className="w-80 bg-white border-r border-slate-200 flex flex-col z-20 shadow-lg">
-        
-        {/* Header */}
-        <div className="p-5 border-b border-slate-100">
-           <h2 className="text-xl font-bold text-slate-800 flex items-center gap-2">
-             <Grid3X3 className="text-brand-600" />
-             Thiết kế Tàu
-           </h2>
-           <p className="text-xs text-slate-400 mt-1">Cấu hình sơ đồ Bay {currentBay}</p>
+      {/* 1. Light Theme Header */}
+      <header className="bg-white border-b border-slate-200 px-8 py-5 flex items-center justify-between flex-shrink-0 z-20 shadow-sm relative overflow-hidden">
+        <div className="relative z-10">
+          <nav className="flex items-center gap-2 text-xs font-semibold text-slate-500 mb-1 uppercase tracking-wider">
+            <span className="hover:text-brand-600 cursor-pointer transition-colors">Định dạng</span>
+            <span className="text-slate-400">/</span>
+            <span className="text-brand-600">Thiết kế tàu</span>
+          </nav>
+          <div className="flex items-center gap-3">
+             <div className="bg-brand-50 backdrop-blur p-2 rounded-lg text-brand-600 animate-float">
+               <PencilRuler size={24} />
+             </div>
+             <h1 className="text-2xl font-bold text-slate-800 tracking-tight">Công Cụ Thiết Kế Tàu</h1>
+          </div>
         </div>
+        
+        <div className="relative z-10 flex items-center gap-3">
+           <button className="flex items-center gap-2 px-5 py-2.5 bg-white border border-slate-200 text-slate-600 hover:text-slate-800 hover:bg-slate-50 text-sm font-semibold rounded-lg transition-all shadow-sm">
+              <Trash2 size={18} />
+              <span className="hidden sm:inline">Reset</span>
+            </button>
+            <div className="h-8 w-px bg-slate-200 mx-1"></div>
+            <button className="flex items-center gap-2 px-6 py-2.5 bg-brand-600 hover:bg-brand-500 text-white text-sm font-semibold rounded-lg shadow-lg shadow-brand-200 transition-all transform hover:-translate-y-0.5 active:translate-y-0">
+              <Save size={18} strokeWidth={2.5} />
+              Lưu Cấu Hình
+            </button>
+        </div>
+      </header>
 
-        <div className="flex-1 overflow-y-auto custom-scrollbar p-5 space-y-8">
+      {/* 2. Main Layout (Sidebar + Grid) */}
+      <div className="flex-1 flex overflow-hidden">
+        
+        {/* LEFT SIDEBAR - CONTROLS */}
+        <div className="w-80 bg-white border-r border-slate-200 flex flex-col z-20 shadow-lg">
           
-          {/* 1. Tools Section */}
-          <section>
-            <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Công cụ (Tools)</h3>
-            <div className="grid grid-cols-3 gap-3">
-               <button 
-                 onClick={() => setActiveTool('SELECT')}
-                 className={`flex flex-col items-center justify-center p-3 rounded-xl border transition-all ${activeTool === 'SELECT' ? 'bg-slate-800 text-white border-slate-800 shadow-md' : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100'}`}
-               >
-                 <Box size={20} className="mb-1" />
-                 <span className="text-[10px] font-bold">Chọn</span>
-               </button>
-               
-               <button 
-                 onClick={() => setActiveTool('ERASER')}
-                 className={`flex flex-col items-center justify-center p-3 rounded-xl border transition-all ${activeTool === 'ERASER' ? 'bg-slate-800 text-white border-slate-800 shadow-md' : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100'}`}
-               >
-                 <Eraser size={20} className="mb-1" />
-                 <span className="text-[10px] font-bold">Xóa</span>
-               </button>
-
-               <button 
-                 onClick={() => setActiveTool('LOCK')}
-                 className={`flex flex-col items-center justify-center p-3 rounded-xl border transition-all ${activeTool === 'LOCK' ? 'bg-slate-800 text-white border-slate-800 shadow-md' : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100'}`}
-               >
-                 {activeTool === 'LOCK' ? <Lock size={20} className="mb-1" /> : <Unlock size={20} className="mb-1" />}
-                 <span className="text-[10px] font-bold">Khóa</span>
-               </button>
-            </div>
-
-            <div className="grid grid-cols-3 gap-3 mt-3">
-               <button 
-                 onClick={() => setActiveTool('DG')}
-                 className={`flex flex-col items-center justify-center p-3 rounded-xl border transition-all ${activeTool === 'DG' ? 'bg-amber-100 text-amber-700 border-amber-300 shadow-sm ring-1 ring-amber-300' : 'bg-white border-slate-200 text-slate-600 hover:bg-amber-50 hover:border-amber-200 hover:text-amber-600'}`}
-               >
-                 <AlertTriangle size={20} className="mb-1" />
-                 <span className="text-[10px] font-bold">DG</span>
-               </button>
-
-               <button 
-                 onClick={() => setActiveTool('HIGHCUBE')}
-                 className={`flex flex-col items-center justify-center p-3 rounded-xl border transition-all ${activeTool === 'HIGHCUBE' ? 'bg-indigo-100 text-indigo-700 border-indigo-300 shadow-sm ring-1 ring-indigo-300' : 'bg-white border-slate-200 text-slate-600 hover:bg-indigo-50 hover:border-indigo-200 hover:text-indigo-600'}`}
-               >
-                 <ArrowUpFromLine size={20} className="mb-1" />
-                 <span className="text-[10px] font-bold">HI</span>
-               </button>
-
-               <button 
-                 onClick={() => setActiveTool('REEFER')}
-                 className={`flex flex-col items-center justify-center p-3 rounded-xl border transition-all ${activeTool === 'REEFER' ? 'bg-cyan-100 text-cyan-700 border-cyan-300 shadow-sm ring-1 ring-cyan-300' : 'bg-white border-slate-200 text-slate-600 hover:bg-cyan-50 hover:border-cyan-200 hover:text-cyan-600'}`}
-               >
-                 <Zap size={20} className="mb-1" />
-                 <span className="text-[10px] font-bold">RF</span>
-               </button>
-            </div>
-          </section>
-
-          {/* 2. Navigation */}
-          <section>
-             <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Số Bay</h3>
-             <div className="flex items-center gap-2 bg-slate-50 p-1.5 rounded-xl border border-slate-200">
-                <button className="p-2 hover:bg-white rounded-lg shadow-sm transition-all text-slate-500 hover:text-slate-800">
-                  <ChevronLeft size={20} />
-                </button>
-                <div className="flex-1 relative">
-                  <select 
-                    value={currentBay} 
-                    onChange={(e) => setCurrentBay(e.target.value)}
-                    className="w-full text-center appearance-none bg-transparent font-bold text-slate-800 outline-none"
-                  >
-                    {Array.from({length: 20}, (_, i) => {
-                      const num = (i*2 + 1).toString().padStart(2, '0');
-                      return <option key={num} value={num}>Bay {num}</option>
-                    })}
-                  </select>
-                </div>
-                <button className="p-2 hover:bg-white rounded-lg shadow-sm transition-all text-slate-500 hover:text-slate-800">
-                  <ChevronRight size={20} />
-                </button>
-             </div>
-             <button className="w-full mt-2 py-2 text-xs font-semibold text-brand-600 bg-brand-50 hover:bg-brand-100 rounded-lg transition-colors border border-brand-200">
-               Xem toàn bộ sơ đồ
-             </button>
-          </section>
-
-          {/* 3. Copy Options */}
-          <section>
-            <div className="flex items-center justify-between mb-3">
-               <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider">Tùy chọn Copy</h3>
-               <label className="flex items-center cursor-pointer">
-                  <span className="mr-2 text-xs text-slate-500 font-medium">Tất cả</span>
-                  <div className="relative">
-                    <input type="checkbox" className="sr-only" checked={copyOptions.all} onChange={() => toggleOption('all')} />
-                    <div className={`block w-8 h-5 rounded-full transition-colors ${copyOptions.all ? 'bg-brand-600' : 'bg-slate-300'}`}></div>
-                    <div className={`dot absolute left-1 top-1 bg-white w-3 h-3 rounded-full transition-transform ${copyOptions.all ? 'transform translate-x-3' : ''}`}></div>
-                  </div>
-               </label>
-            </div>
+          <div className="flex-1 overflow-y-auto custom-scrollbar p-5 space-y-8">
             
-            <div className="space-y-3 bg-slate-50 p-4 rounded-xl border border-slate-100">
-               {[
-                 { id: 'deck', label: 'Boong (Deck)' },
-                 { id: 'hold', label: 'Hầm (Hold)' },
-                 { id: 'hatch', label: 'Nắp Hầm (Hatch)' },
-               ].map((opt) => (
-                 <div key={opt.id} className="flex items-center justify-between">
-                    <span className="text-sm text-slate-600 font-medium">{opt.label}</span>
-                    <div className="relative cursor-pointer" onClick={() => toggleOption(opt.id as any)}>
-                      <div className={`block w-9 h-5 rounded-full transition-colors ${copyOptions[opt.id as keyof typeof copyOptions] ? 'bg-blue-500' : 'bg-slate-300'}`}></div>
-                      <div className={`absolute left-1 top-1 bg-white w-3 h-3 rounded-full transition-transform ${copyOptions[opt.id as keyof typeof copyOptions] ? 'transform translate-x-4' : ''}`}></div>
+            {/* 1. Tools Section */}
+            <section>
+              <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Công cụ (Tools)</h3>
+              <div className="grid grid-cols-3 gap-3">
+                 <button 
+                   onClick={() => setActiveTool('SELECT')}
+                   className={`flex flex-col items-center justify-center p-3 rounded-xl border transition-all ${activeTool === 'SELECT' ? 'bg-slate-800 text-white border-slate-800 shadow-md' : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100'}`}
+                 >
+                   <Box size={20} className="mb-1" />
+                   <span className="text-[10px] font-bold">Chọn</span>
+                 </button>
+                 
+                 <button 
+                   onClick={() => setActiveTool('ERASER')}
+                   className={`flex flex-col items-center justify-center p-3 rounded-xl border transition-all ${activeTool === 'ERASER' ? 'bg-slate-800 text-white border-slate-800 shadow-md' : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100'}`}
+                 >
+                   <Eraser size={20} className="mb-1" />
+                   <span className="text-[10px] font-bold">Xóa</span>
+                 </button>
+
+                 <button 
+                   onClick={() => setActiveTool('LOCK')}
+                   className={`flex flex-col items-center justify-center p-3 rounded-xl border transition-all ${activeTool === 'LOCK' ? 'bg-slate-800 text-white border-slate-800 shadow-md' : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100'}`}
+                 >
+                   {activeTool === 'LOCK' ? <Lock size={20} className="mb-1" /> : <Unlock size={20} className="mb-1" />}
+                   <span className="text-[10px] font-bold">Khóa</span>
+                 </button>
+              </div>
+
+              <div className="grid grid-cols-3 gap-3 mt-3">
+                 <button 
+                   onClick={() => setActiveTool('DG')}
+                   className={`flex flex-col items-center justify-center p-3 rounded-xl border transition-all ${activeTool === 'DG' ? 'bg-amber-100 text-amber-700 border-amber-300 shadow-sm ring-1 ring-amber-300' : 'bg-white border-slate-200 text-slate-600 hover:bg-amber-50 hover:border-amber-200 hover:text-amber-600'}`}
+                 >
+                   <AlertTriangle size={20} className="mb-1" />
+                   <span className="text-[10px] font-bold">DG</span>
+                 </button>
+
+                 <button 
+                   onClick={() => setActiveTool('HIGHCUBE')}
+                   className={`flex flex-col items-center justify-center p-3 rounded-xl border transition-all ${activeTool === 'HIGHCUBE' ? 'bg-indigo-100 text-indigo-700 border-indigo-300 shadow-sm ring-1 ring-indigo-300' : 'bg-white border-slate-200 text-slate-600 hover:bg-indigo-50 hover:border-indigo-200 hover:text-indigo-600'}`}
+                 >
+                   <ArrowUpFromLine size={20} className="mb-1" />
+                   <span className="text-[10px] font-bold">HI</span>
+                 </button>
+
+                 <button 
+                   onClick={() => setActiveTool('REEFER')}
+                   className={`flex flex-col items-center justify-center p-3 rounded-xl border transition-all ${activeTool === 'REEFER' ? 'bg-cyan-100 text-cyan-700 border-cyan-300 shadow-sm ring-1 ring-cyan-300' : 'bg-white border-slate-200 text-slate-600 hover:bg-cyan-50 hover:border-cyan-200 hover:text-cyan-600'}`}
+                 >
+                   <Zap size={20} className="mb-1" />
+                   <span className="text-[10px] font-bold">RF</span>
+                 </button>
+              </div>
+            </section>
+
+            {/* 2. Navigation */}
+            <section>
+               <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Số Bay</h3>
+               <div className="flex items-center gap-2 bg-slate-50 p-1.5 rounded-xl border border-slate-200">
+                  <button className="p-2 hover:bg-white rounded-lg shadow-sm transition-all text-slate-500 hover:text-slate-800">
+                    <ChevronLeft size={20} />
+                  </button>
+                  <div className="flex-1 relative">
+                    <select 
+                      value={currentBay} 
+                      onChange={(e) => setCurrentBay(e.target.value)}
+                      className="w-full text-center appearance-none bg-transparent font-bold text-slate-800 outline-none"
+                    >
+                      {Array.from({length: 20}, (_, i) => {
+                        const num = (i*2 + 1).toString().padStart(2, '0');
+                        return <option key={num} value={num}>Bay {num}</option>
+                      })}
+                    </select>
+                  </div>
+                  <button className="p-2 hover:bg-white rounded-lg shadow-sm transition-all text-slate-500 hover:text-slate-800">
+                    <ChevronRight size={20} />
+                  </button>
+               </div>
+               <button className="w-full mt-2 py-2 text-xs font-semibold text-brand-600 bg-brand-50 hover:bg-brand-100 rounded-lg transition-colors border border-brand-200">
+                 Xem toàn bộ sơ đồ
+               </button>
+            </section>
+
+            {/* 3. Copy Options */}
+            <section>
+              <div className="flex items-center justify-between mb-3">
+                 <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider">Tùy chọn Copy</h3>
+                 <label className="flex items-center cursor-pointer">
+                    <span className="mr-2 text-xs text-slate-500 font-medium">Tất cả</span>
+                    <div className="relative">
+                      <input type="checkbox" className="sr-only" checked={copyOptions.all} onChange={() => toggleOption('all')} />
+                      <div className={`block w-8 h-5 rounded-full transition-colors ${copyOptions.all ? 'bg-brand-600' : 'bg-slate-300'}`}></div>
+                      <div className={`dot absolute left-1 top-1 bg-white w-3 h-3 rounded-full transition-transform ${copyOptions.all ? 'transform translate-x-3' : ''}`}></div>
                     </div>
-                 </div>
-               ))}
-            </div>
-
-            <div className="grid grid-cols-2 gap-3 mt-4">
-               <button className="flex items-center justify-center gap-2 py-2.5 bg-white border border-slate-200 text-slate-700 hover:border-blue-300 hover:text-blue-600 rounded-lg text-sm font-semibold transition-all shadow-sm">
-                  <Copy size={16} /> Copy
-               </button>
-               <button className="flex items-center justify-center gap-2 py-2.5 bg-white border border-slate-200 text-slate-700 hover:border-emerald-300 hover:text-emerald-600 rounded-lg text-sm font-semibold transition-all shadow-sm">
-                  <Clipboard size={16} /> Paste
-               </button>
-            </div>
-          </section>
-
-          {/* 4. Output Actions */}
-          <section>
-             <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">In Ấn</h3>
-             <div className="grid grid-cols-2 gap-3">
-               <button className="flex flex-col items-center justify-center gap-1 py-3 bg-sky-50 text-sky-700 hover:bg-sky-100 rounded-xl text-xs font-semibold transition-colors">
-                  <Printer size={20} /> In tổng thể
-               </button>
-               <button className="flex flex-col items-center justify-center gap-1 py-3 bg-sky-50 text-sky-700 hover:bg-sky-100 rounded-xl text-xs font-semibold transition-colors">
-                  <FileOutput size={20} /> In chi tiết
-               </button>
-             </div>
-          </section>
-
-        </div>
-
-        {/* Footer Actions */}
-        <div className="p-5 border-t border-slate-200 bg-slate-50 space-y-3">
-           <button className="w-full flex items-center justify-center gap-2 py-3 bg-white border border-red-200 text-red-600 hover:bg-red-50 rounded-xl text-sm font-bold transition-all">
-              <Trash2 size={18} /> CLEAR ALL
-           </button>
-           <button className="w-full flex items-center justify-center gap-2 py-3 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-sm font-bold shadow-lg shadow-brand-500/30 transition-all">
-              <Save size={18} /> SAVE CHANGES
-           </button>
-        </div>
-
-      </div>
-
-      {/* RIGHT - GRID CANVAS */}
-      <div className="flex-1 overflow-hidden relative flex flex-col items-center bg-[#eef2f6]">
-        
-        {/* Top Info Bar */}
-        <div className="w-full px-8 py-4 flex justify-between items-center bg-white/50 backdrop-blur-sm border-b border-slate-200 z-10">
-           <div className="flex items-center gap-4">
-              <div className="flex items-center gap-2">
-                 <div className="w-3 h-3 bg-amber-100 border border-amber-300 rounded-sm"></div>
-                 <span className="text-xs font-medium text-slate-600">DG (Hàng nguy hiểm)</span>
+                 </label>
               </div>
-              <div className="flex items-center gap-2">
-                 <div className="w-3 h-3 bg-indigo-100 border border-indigo-300 rounded-sm"></div>
-                 <span className="text-xs font-medium text-slate-600">HI (High Cube)</span>
-              </div>
-              <div className="flex items-center gap-2">
-                 <div className="w-3 h-3 bg-cyan-100 border border-cyan-300 rounded-sm"></div>
-                 <span className="text-xs font-medium text-slate-600">RF (Hàng lạnh)</span>
-              </div>
-           </div>
-           <div className="text-xs text-slate-400">Mouse: Click to toggle • Mode: {activeTool}</div>
-        </div>
-
-        {/* The Ship Grid */}
-        <div className="flex-1 w-full overflow-auto p-10 flex items-center justify-center custom-scrollbar">
-           
-           <div className="relative bg-white p-8 rounded-lg shadow-xl border border-slate-300">
               
-              {/* Row Indicators Left */}
-              <div className="absolute left-2 top-8 bottom-8 flex flex-col justify-between text-[10px] font-bold text-slate-400 py-1">
-                 {/* Top 5 rows (Deck) - usually numbered 82, 84, 86... just using simple index for now */}
-                 <div className="flex flex-col gap-[34px]">
-                    <span>88</span>
-                    <span>86</span>
-                    <span>84</span>
-                    <span>82</span>
-                 </div>
-                 {/* Bottom 5 rows (Hold) */}
-                 <div className="flex flex-col gap-[34px] mt-10">
-                    <span>08</span>
-                    <span>06</span>
-                    <span>04</span>
-                    <span>02</span>
-                 </div>
+              <div className="space-y-3 bg-slate-50 p-4 rounded-xl border border-slate-100">
+                 {[
+                   { id: 'deck', label: 'Boong (Deck)' },
+                   { id: 'hold', label: 'Hầm (Hold)' },
+                   { id: 'hatch', label: 'Nắp Hầm (Hatch)' },
+                 ].map((opt) => (
+                   <div key={opt.id} className="flex items-center justify-between">
+                      <span className="text-sm text-slate-600 font-medium">{opt.label}</span>
+                      <div className="relative cursor-pointer" onClick={() => toggleOption(opt.id as any)}>
+                        <div className={`block w-9 h-5 rounded-full transition-colors ${copyOptions[opt.id as keyof typeof copyOptions] ? 'bg-blue-500' : 'bg-slate-300'}`}></div>
+                        <div className={`absolute left-1 top-1 bg-white w-3 h-3 rounded-full transition-transform ${copyOptions[opt.id as keyof typeof copyOptions] ? 'transform translate-x-4' : ''}`}></div>
+                      </div>
+                   </div>
+                 ))}
               </div>
 
-              {/* Grid Container */}
-              <div className="ml-6">
-                
-                {/* DECK SECTION */}
-                <div className="flex flex-col gap-1 mb-8 relative">
-                   <div className="absolute -right-12 top-1/2 -rotate-90 text-xs font-bold text-blue-500 tracking-widest border border-blue-200 px-2 py-1 rounded bg-blue-50">DECK</div>
-                   {[0, 1, 2, 3].map(rowIdx => (
-                      <div key={`row-${rowIdx}`} className="flex gap-1">
-                         {grid.filter(c => c.row === rowIdx).map(cell => (
-                            <CellComponent key={cell.id} cell={cell} onClick={() => handleCellClick(cell.id)} />
-                         ))}
-                      </div>
-                   ))}
-                </div>
-
-                {/* HATCH COVER DIVIDER */}
-                <div className="h-6 w-full bg-slate-100 border-y-2 border-slate-300 border-dashed flex items-center justify-center mb-4">
-                   <span className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] bg-white px-2">Hatch Cover</span>
-                </div>
-
-                {/* HOLD SECTION */}
-                <div className="flex flex-col gap-1 relative">
-                   <div className="absolute -right-12 top-1/2 -rotate-90 text-xs font-bold text-slate-500 tracking-widest border border-slate-200 px-2 py-1 rounded bg-slate-50">HOLD</div>
-                   {[5, 6, 7, 8].map(rowIdx => (
-                      <div key={`row-${rowIdx}`} className="flex gap-1">
-                         {grid.filter(c => c.row === rowIdx).map(cell => (
-                            <CellComponent key={cell.id} cell={cell} onClick={() => handleCellClick(cell.id)} />
-                         ))}
-                      </div>
-                   ))}
-                </div>
+              <div className="grid grid-cols-2 gap-3 mt-4">
+                 <button className="flex items-center justify-center gap-2 py-2.5 bg-white border border-slate-200 text-slate-700 hover:border-blue-300 hover:text-blue-600 rounded-lg text-sm font-semibold transition-all shadow-sm">
+                    <Copy size={16} /> Copy
+                 </button>
+                 <button className="flex items-center justify-center gap-2 py-2.5 bg-white border border-slate-200 text-slate-700 hover:border-emerald-300 hover:text-emerald-600 rounded-lg text-sm font-semibold transition-all shadow-sm">
+                    <Clipboard size={16} /> Paste
+                 </button>
               </div>
+            </section>
 
-           </div>
+            {/* 4. Output Actions */}
+            <section>
+               <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">In Ấn</h3>
+               <div className="grid grid-cols-2 gap-3">
+                 <button className="flex flex-col items-center justify-center gap-1 py-3 bg-sky-50 text-sky-700 hover:bg-sky-100 rounded-xl text-xs font-semibold transition-colors">
+                    <Printer size={20} /> In tổng thể
+                 </button>
+                 <button className="flex flex-col items-center justify-center gap-1 py-3 bg-sky-50 text-sky-700 hover:bg-sky-100 rounded-xl text-xs font-semibold transition-colors">
+                    <FileOutput size={20} /> In chi tiết
+                 </button>
+               </div>
+            </section>
+
+          </div>
+
+          {/* Footer Actions */}
+          <div className="p-5 border-t border-slate-200 bg-slate-50 space-y-3">
+             <button className="w-full flex items-center justify-center gap-2 py-3 bg-white border border-red-200 text-red-600 hover:bg-red-50 rounded-xl text-sm font-bold transition-all">
+                <Trash2 size={18} /> CLEAR ALL
+             </button>
+          </div>
+
         </div>
 
+        {/* RIGHT - GRID CANVAS */}
+        <div className="flex-1 overflow-hidden relative flex flex-col items-center bg-[#eef2f6]">
+          
+          {/* Top Info Bar */}
+          <div className="w-full px-8 py-4 flex justify-between items-center bg-white/50 backdrop-blur-sm border-b border-slate-200 z-10">
+             <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2">
+                   <div className="w-3 h-3 bg-amber-100 border border-amber-300 rounded-sm"></div>
+                   <span className="text-xs font-medium text-slate-600">DG (Hàng nguy hiểm)</span>
+                </div>
+                <div className="flex items-center gap-2">
+                   <div className="w-3 h-3 bg-indigo-100 border border-indigo-300 rounded-sm"></div>
+                   <span className="text-xs font-medium text-slate-600">HI (High Cube)</span>
+                </div>
+                <div className="flex items-center gap-2">
+                   <div className="w-3 h-3 bg-cyan-100 border border-cyan-300 rounded-sm"></div>
+                   <span className="text-xs font-medium text-slate-600">RF (Hàng lạnh)</span>
+                </div>
+             </div>
+             <div className="text-xs text-slate-400">Mouse: Click to toggle • Mode: {activeTool}</div>
+          </div>
+
+          {/* The Ship Grid */}
+          <div className="flex-1 w-full overflow-auto p-10 flex items-center justify-center custom-scrollbar">
+             
+             <div className="relative bg-white p-8 rounded-lg shadow-xl border border-slate-300">
+                
+                {/* Row Indicators Left */}
+                <div className="absolute left-2 top-8 bottom-8 flex flex-col justify-between text-[10px] font-bold text-slate-400 py-1">
+                   {/* Top 5 rows (Deck) */}
+                   <div className="flex flex-col gap-[34px]">
+                      <span>88</span>
+                      <span>86</span>
+                      <span>84</span>
+                      <span>82</span>
+                   </div>
+                   {/* Bottom 5 rows (Hold) */}
+                   <div className="flex flex-col gap-[34px] mt-10">
+                      <span>08</span>
+                      <span>06</span>
+                      <span>04</span>
+                      <span>02</span>
+                   </div>
+                </div>
+
+                {/* Grid Container */}
+                <div className="ml-6">
+                  
+                  {/* DECK SECTION */}
+                  <div className="flex flex-col gap-1 mb-8 relative">
+                     <div className="absolute -right-12 top-1/2 -rotate-90 text-xs font-bold text-blue-500 tracking-widest border border-blue-200 px-2 py-1 rounded bg-blue-50">DECK</div>
+                     {[0, 1, 2, 3].map(rowIdx => (
+                        <div key={`row-${rowIdx}`} className="flex gap-1">
+                           {grid.filter(c => c.row === rowIdx).map(cell => (
+                              <CellComponent key={cell.id} cell={cell} onClick={() => handleCellClick(cell.id)} />
+                           ))}
+                        </div>
+                     ))}
+                  </div>
+
+                  {/* HATCH COVER DIVIDER */}
+                  <div className="h-6 w-full bg-slate-100 border-y-2 border-slate-300 border-dashed flex items-center justify-center mb-4">
+                     <span className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] bg-white px-2">Hatch Cover</span>
+                  </div>
+
+                  {/* HOLD SECTION */}
+                  <div className="flex flex-col gap-1 relative">
+                     <div className="absolute -right-12 top-1/2 -rotate-90 text-xs font-bold text-slate-500 tracking-widest border border-slate-200 px-2 py-1 rounded bg-slate-50">HOLD</div>
+                     {[5, 6, 7, 8].map(rowIdx => (
+                        <div key={`row-${rowIdx}`} className="flex gap-1">
+                           {grid.filter(c => c.row === rowIdx).map(cell => (
+                              <CellComponent key={cell.id} cell={cell} onClick={() => handleCellClick(cell.id)} />
+                           ))}
+                        </div>
+                     ))}
+                  </div>
+                </div>
+
+             </div>
+          </div>
+
+        </div>
       </div>
     </div>
   );
